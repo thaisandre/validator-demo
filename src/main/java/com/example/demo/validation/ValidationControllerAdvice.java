@@ -25,11 +25,14 @@ public class ValidationControllerAdvice {
 
     @InitBinder
     public void initBinderDto(WebDataBinder webDataBinder){
-        HasValidators dto = (HasValidators) webDataBinder.getTarget();
-        dto.validators().forEach(
-            (Class<? extends Validator> validatorClass) -> {
-                webDataBinder.addValidators(applicationContext.getBean(validatorClass));
-            });
+        Object target = webDataBinder.getTarget();
+        if(target != null && target instanceof HasValidators) {
+            HasValidators dto = (HasValidators) webDataBinder.getTarget();
+            dto.validators().forEach(
+                    (Class<? extends Validator> validatorClass) -> {
+                        webDataBinder.addValidators(applicationContext.getBean(validatorClass));
+                    });
+        }
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
