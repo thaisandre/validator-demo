@@ -1,18 +1,15 @@
 package com.example.demo.validation;
 
+import com.example.demo.annotation.ValidatedBy;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.MessageSource;
+import org.springframework.context.*;
 import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.FieldError;
-import org.springframework.validation.ObjectError;
-import org.springframework.validation.Validator;
-import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.WebDataBinder;
+import org.springframework.validation.*;
+import org.springframework.web.bind.*;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import java.util.*;
 
 @RestControllerAdvice
 public class ValidationControllerAdvice {
@@ -26,12 +23,10 @@ public class ValidationControllerAdvice {
     @InitBinder
     public void initBinderDto(WebDataBinder webDataBinder){
         Object target = webDataBinder.getTarget();
-        if(target != null && target instanceof HasValidators) {
-            HasValidators dto = (HasValidators) webDataBinder.getTarget();
-            dto.validators().forEach(
-                    (Class<? extends Validator> validatorClass) -> {
-                        webDataBinder.addValidators(applicationContext.getBean(validatorClass));
-                    });
+
+        if (target != null && target.getClass().isAnnotationPresent(ValidatedBy.class)) {
+            List<Class<? extends Validator>> classes = Arrays.asList(target.getClass().getAnnotation(ValidatedBy.class).value());
+            classes.forEach(clazz -> webDataBinder.addValidators(applicationContext.getBean(clazz)));
         }
     }
 

@@ -1,15 +1,15 @@
 package com.example.demo.company;
 
-import com.example.demo.validation.HasValidators;
-import org.springframework.validation.Validator;
+import com.example.demo.annotation.ValidatedBy;
 
 import javax.validation.constraints.NotBlank;
-import java.util.List;
 
-public class CompanyDto implements HasValidators {
+@ValidatedBy({UniqueCompanyCodeValidator.class, UniqueCompanyFantasyNameValidator.class})
+public class CompanyDto {
 
     @NotBlank private String name;
     @NotBlank private String code;
+    @NotBlank private String fantasyName;
 
     public void setName(String nome) {
         this.name = nome;
@@ -19,15 +19,20 @@ public class CompanyDto implements HasValidators {
         this.code = code;
     }
 
+    public void setFantasyName(String fantasyName) {
+        this.fantasyName = fantasyName;
+    }
+
     public String getCode() {
         return this.code;
     }
 
-    public Company toModel() {
-        return new Company(this.name, this.code);
+    public String getFantasyName() {
+        return this.fantasyName;
     }
 
-    public List<Class<? extends Validator>> validators() {
-        return List.of(UniqueCompanyCodeValidator.class);
+    public Company toModel() {
+        return new Company(this.name, this.code, this.fantasyName);
     }
+
 }

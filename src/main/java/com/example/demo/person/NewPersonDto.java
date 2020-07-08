@@ -1,13 +1,12 @@
 package com.example.demo.person;
 
 
-import com.example.demo.validation.HasValidators;
-import org.springframework.validation.Validator;
+import com.example.demo.annotation.ValidatedBy;
 
 import javax.validation.constraints.NotBlank;
-import java.util.List;
 
-public class NewPersonDto implements HasValidators {
+@ValidatedBy(UniqueEmailValidator.class)
+public class NewPersonDto {
 
     @NotBlank private String name;
     @NotBlank private String email;
@@ -26,10 +25,6 @@ public class NewPersonDto implements HasValidators {
 
     public String getEmail() {
         return this.email;
-    }
-
-    public List<Class<? extends Validator>> validators() {
-        return (List.of(UniqueEmailValidator.class));
     }
 
 }

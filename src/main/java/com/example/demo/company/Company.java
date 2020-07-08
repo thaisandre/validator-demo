@@ -16,15 +16,18 @@ public class Company {
 
     private String name;
     private String code;
+    private String fantasyName;
 
     @Deprecated
     public Company() {}
 
-    public Company(@NotBlank String name, @NotBlank String code) {
+    public Company(@NotBlank String name, @NotBlank String code, @NotBlank String fantasyName) {
         Assert.notNull(name, "name cannot be null or empty");
         Assert.notNull(code, "code cannot be null or empty");
+        Assert.notNull(fantasyName, "fantasyName cannot be null or empty");
         this.name = name;
         this.code = code;
+        this.fantasyName = fantasyName;
     }
 
     public Long getId() {
@@ -39,4 +42,7 @@ public class Company {
         return code;
     }
 
+    public String getFantasyName() {
+        return fantasyName;
+    }
 }

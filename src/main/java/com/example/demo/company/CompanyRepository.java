@@ -8,6 +8,8 @@ public interface CompanyRepository extends Repository<Company, Long> {
 
     Optional<Company> findByCode(String code);
 
+    Optional<Company> findByFantasyName(String fantasyName);
+
     Company save(Company company);
 
 }
